@@ -1,3 +1,5 @@
 node_modules
 dist/assets
 _config.js
+.idea
+src/config.js
