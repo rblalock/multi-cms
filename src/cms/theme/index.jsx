@@ -1,3 +1,4 @@
+var React = require('react');
 var config = require('../../config');
 var Link = require('react-router').Link;
 
@@ -36,16 +37,10 @@ class Sidebar extends React.Component {
 				<section className="sidebar">
 					<ul className="sidebar-menu">
 						<li className="header">Classes</li>
-						<li key="testlist">
-							<Link to="/list">
-								<span>Test List</span>
-							</Link>
-						</li>
-
 						{
 							this.state.menuItems.map(item => (
 								<li key={item.name}>
-									<Link to={ `/object/${item.path}` }>
+									<Link to={ `/list/${item.path}` }>
 										<span>{item.name}</span>
 									</Link>
 								</li>
@@ -65,10 +60,6 @@ class Container extends React.Component {
 	render() {
 		return (
 			<div className="content-wrapper">
-				<section className="content-header">
-					<h1>{ this.props.title }</h1>
-				</section>
-
 				<div className="content">
 					{ this.props.children }
 				</div>

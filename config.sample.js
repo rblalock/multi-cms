@@ -4,10 +4,12 @@
  */
 
 var Config = {
-	connector: {
-		name: 'parse',
-		appId: '',
-		javascriptKey: ''
+	connectors: {
+		parse: {
+			name: 'parse',
+			appId: '',
+			javascriptKey: ''
+		}
 	},
 	objects: [
 		{
