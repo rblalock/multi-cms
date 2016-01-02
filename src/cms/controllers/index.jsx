@@ -2,7 +2,7 @@ var React = require('react');
 var Theme = require('../theme');
 
 /**
- * @class App
+ * @class Controllers.App
  */
 class App extends React.Component {
 	render() {

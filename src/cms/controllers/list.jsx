@@ -1,13 +1,17 @@
 var React = require('react');
 var Theme = require('../theme');
 var config = require('../../config');
+var Tableview = require('../ui/tableview');
+var transformHelper = require('../helpers/transforms');
 
 /**
- * @class List
+ * @class Controller.List
  */
 class ListComponent extends React.Component {
 	constructor (props) {
 		super(props);
+
+		this.connector = {};
 
 		this.state = {
 			rowData: [],
@@ -17,15 +21,28 @@ class ListComponent extends React.Component {
 		this.loadData();
 	}
 
+	/**
+	 * Get the configuration for this list.  Also sets the connector for the list.
+	 * @param {Object} props React params passed to this instance
+	 * @returns {Object}
+	 */
 	getConfig (props) {
-		return config.objects.filter(row => {
+		var c = config.objects.filter(row => {
 			var p = (props && props.params.object) ? props.params.object : this.props.params.object;
 			if (row.path === p) {
 				return row;
 			}
 		})[0];
+
+		this.connector = config.connectors[c.connector];
+
+		return c;
 	}
 
+	/**
+	 * This is called when the route changes for the list
+	 * @param {Object} props React properties
+	 */
 	componentWillReceiveProps (props) {
 		this.state = {
 			rowData: [],
@@ -39,10 +56,15 @@ class ListComponent extends React.Component {
 		//this.$route.router.go({ path: '/object/' + this.config.path + '/create' });
 	}
 
+	/**
+	 * Transform data for this list (checks to ensure only visible columns from the config are set)
+	 * @param {Array} results
+	 * @returns {Array}
+	 */
 	transformData (results) {
 		return results.map(row => {
 			var obj = {
-				id: row.objectId
+				id: row.objectId // TODO unique ID should be set in the connector or config
 			};
 
 			Object.keys(this.state.config.model).forEach(key => {
@@ -55,19 +77,28 @@ class ListComponent extends React.Component {
 		});
 	}
 
+	/**
+	 * Handles loading the remote data
+	 * @param {Function} callback
+	 */
 	loadData (callback) {
-		config.connectors[this.state.config.connector].query(
+		this.connector.query(
 			this.state.config.dataObject,
 			{},
 			(err, results) => {
 				if (!err) {
 					var data = this.transformData(results);
+
 					this.setState({
-						rowData: data,
+						rowData: transformHelper.fieldTransform(
+							data,
+							this.connector,
+							this.state.config.model
+						),
 						config: this.state.config
 					});
-					// TODO set data here
-					if (callback) { callback(null, data); }
+
+					if (callback) { callback(null, this.state.rowData); }
 				} else {
 					// TODO handle no data state / error
 					if (callback) { callback(error, null); }
@@ -85,22 +116,12 @@ class ListComponent extends React.Component {
 						<h3 className="box-title">{ this.state.config.name }</h3>
 						<button className="btn btn-primary pull-right">
 							New Record &nbsp;&nbsp;
-							<span  className="fa fa-plus"></span>
+							<span className="fa fa-plus"></span>
 						</button>
 					</div>
 
 					<div className="box-body">
-						<table>
-							<tbody>
-							{
-								this.state.rowData.map(row => (
-									<tr key={row.id}>
-										<td>{row.title}</td>
-									</tr>
-								))
-							}
-							</tbody>
-						</table>
+						<Tableview rowData={ this.state.rowData } />
 					</div>
 				</div>
 			</Theme.Container>
