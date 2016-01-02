@@ -10,6 +10,12 @@ class Tableview extends React.Component {
 		super(props);
 	}
 
+	rowSelect (rowData, event) {
+		if (this.props.rowSelect) {
+			this.props.rowSelect( rowData );
+		}
+	}
+	
 	render () {
 		var columns = (this.props.rowData && this.props.rowData[0]) ? Object.keys(this.props.rowData[0]) : [];
 
@@ -36,11 +42,19 @@ class Tableview extends React.Component {
 						</tr>
 					</thead>
 					<tbody>
-					{
-						this.props.rowData.map((row, index) => (
-							<TableviewRow key={ index } data={ row }  />
-						))
-					}
+						{
+							this.props.rowData.map((row, index) => (
+								<TableviewRow
+									config={ this.props.config }
+									rowSelect={ this.rowSelect.bind(this, row) }
+									key={ index }
+									data={ row }>
+									<td>
+										<span className="fa fa-trash-o"></span>
+									</td>
+								</TableviewRow>
+							))
+						}
 					</tbody>
 				</table>
 

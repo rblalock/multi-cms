@@ -5,7 +5,7 @@ var Link = require('react-router').Link;
 /**
  * @class Theme.Header
  */
-class Header extends React.Component {
+exports.Header = class Header extends React.Component {
 	render() {
 		return (
 			<header className="main-header">
@@ -18,12 +18,12 @@ class Header extends React.Component {
 			</header>
 		);
 	}
-}
+};
 
 /**
  * @class Theme.Sidebar
  */
-class Sidebar extends React.Component {
+exports.Sidebar = class Sidebar extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -51,12 +51,12 @@ class Sidebar extends React.Component {
 			</aside>
 		);
 	}
-}
+};
 
 /**
  * @class Theme.Container
  */
-class Container extends React.Component {
+exports.Container = class Container extends React.Component {
 	render() {
 		return (
 			<div className="content-wrapper">
@@ -66,10 +66,33 @@ class Container extends React.Component {
 			</div>
 		);
 	}
-}
+};
 
-module.exports = {
-	Header: Header,
-	Container: Container,
-	Sidebar: Sidebar
+/**
+ * @class Theme.Heading
+ */
+exports.Heading = class Heading extends React.Component {
+	render() {
+		return (
+			<div className="box-header">
+				<h3 className="box-title">{ this.props.title }</h3>
+				{ this.props.children }
+			</div>
+		);
+	}
+};
+
+/**
+ * @class Theme.Content
+ */
+exports.Content = class Content extends React.Component {
+	render() {
+		return (
+			<div className="box">
+				<div className="box-body">
+					{ this.props.children }
+				</div>
+			</div>
+		);
+	}
 };

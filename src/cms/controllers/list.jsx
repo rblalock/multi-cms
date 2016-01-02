@@ -111,19 +111,18 @@ class ListComponent extends React.Component {
 	render () {
 		return (
 			<Theme.Container>
-				<div className="box">
-					<div className="box-header">
-						<h3 className="box-title">{ this.state.config.name }</h3>
+				<Theme.Content>
+					<Theme.Heading title={ this.state.config.name }>
 						<button className="btn btn-primary pull-right">
 							New Record &nbsp;&nbsp;
 							<span className="fa fa-plus"></span>
 						</button>
-					</div>
+					</Theme.Heading>
 
-					<div className="box-body">
-						<Tableview rowData={ this.state.rowData } />
-					</div>
-				</div>
+					<Tableview
+						config={ this.state.config }
+						rowData={ this.state.rowData } />
+				</Theme.Content>
 			</Theme.Container>
 		);
 	}
