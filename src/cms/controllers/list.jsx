@@ -63,15 +63,17 @@ class ListComponent extends React.Component {
 	 */
 	transformData (results) {
 		return results.map(row => {
-			var obj = {
-				id: row.objectId // TODO unique ID should be set in the connector or config
-			};
+			if (row) {
+				var obj = {};
 
-			Object.keys(this.state.config.model).forEach(key => {
-				if (this.state.config.model[key].listColumn) {
-					obj[key] = row[key];
-				}
-			});
+				Object.keys(this.state.config.model).forEach(key => {
+					if (this.state.config.model[key].listColumn) {
+						obj[key] = row[key];
+					}
+				});
+
+				obj.id = row.id;
+			}
 
 			return obj;
 		});

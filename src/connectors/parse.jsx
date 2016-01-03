@@ -37,8 +37,19 @@ class ParseConnector {
 	}
 
 	/**
+	 * Set the primary key on the data
+	 * @param {Object} data
+	 * @return {Object}
+	 */
+	setPrimaryKey (data) {
+		data.id = data.objectId;
+		delete data.objectId;
+		return data;
+	}
+
+	/**
 	 * Connector handling of field transforms
-	 * @param {String} val
+	 * @param {String/Object} val
 	 * @param {Function} transform
 	 * @returns {*}
 	 */
@@ -65,10 +76,10 @@ class ParseConnector {
 		}
 
 		model.save(null, {
-			success: function (results) {
+			success: results => {
 				callback(null, results);
 			},
-			error: function (obj, error) {
+			error: (obj, error) => {
 				callback(error, null);
 			}
 		});
@@ -85,17 +96,17 @@ class ParseConnector {
 		var PQuery = new Parse.Query(PObject);
 
 		PQuery.get(id, {
-			success: function (results) {
+			success: results => {
 				results.destroy({
-					success: function (obj) {
+					success: obj => {
 						callback(null, obj);
 					},
-					error: function (obj, error) {
+					error: (obj, error) => {
 						callback(error, null);
 					}
 				});
 			},
-			error: function (obj, error) {
+			error: (obj, error) => {
 				callback(error, null);
 			}
 		});
@@ -115,7 +126,9 @@ class ParseConnector {
 
 		PQuery.find({
 			success: results => {
-				callback(null, results.map(function (row) { return row.toJSON() }));
+				callback(null, results.map(row => {
+					return this.setPrimaryKey(row.toJSON())
+				}));
 			},
 			error: (obj, error) => {
 				callback(error, null);
@@ -134,10 +147,13 @@ class ParseConnector {
 		var PQuery = new Parse.Query(PObject);
 
 		PQuery.get(id, {
-			success: function (results) {
-				callback(null, results.toJSON());
+			success: results => {
+				callback(
+					null,
+					this.setPrimaryKey(results.toJSON())
+				);
 			},
-			error: function (obj, error) {
+			error: (obj, error) => {
 				callback(error, null);
 			}
 		});

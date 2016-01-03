@@ -1,6 +1,8 @@
 var React = require('react');
 var Theme = require('../theme');
 var config = require('../../config');
+var transformHelper = require('../helpers/transforms');
+var FormField = require('../ui/formField').Field;
 
 /**
  * @class Controller.Detail
@@ -10,9 +12,11 @@ class Detail extends React.Component {
 		super(props);
 
 		this.state = {
-			data: [],
+			data: {},
 			config: this.getConfig()
 		};
+
+		this.loadData();
 	}
 
 	/**
@@ -39,13 +43,55 @@ class Detail extends React.Component {
 		return c;
 	}
 
+	/**
+	 * Load data
+	 * @param {Function} callback
+	 */
+	loadData (callback) {
+		this.connector.findOne(
+			this.state.config.dataObject,
+			this.props.params.objectId,
+			(err, results) => {
+				if (!err) {
+					this.setState({
+						data: transformHelper.fieldTransform(
+							[results],
+							this.connector,
+							this.state.config.model
+						)[0],
+						config: this.state.config
+					});
+
+					if (callback) { callback(null, results); }
+				} else {
+					if (callback) { callback(err, null); }
+					console.error(err);
+				}
+			}
+		);
+	}
+
 	render () {
 		return (
 			<Theme.Container>
 				<Theme.Content>
-					<Theme.Heading title={ this.state.config.name }>
+					<Theme.Heading title={ this.state.config.name } />
 
-					</Theme.Heading>
+					<form>
+						{
+							Object.keys(this.state.data).map((key, index) => (
+								<FormField
+									key={ index }
+									label={ key }
+									value={ this.state.data[key] }
+									config={ this.state.config } />
+							))
+						}
+					</form>
+
+					<div className="box-footer">
+						<button type="submit" className="btn btn-primary">Submit</button>
+					</div>
 				</Theme.Content>
 			</Theme.Container>
 		);
