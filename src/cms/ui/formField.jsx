@@ -19,7 +19,7 @@ exports.Field = class FormField extends React.Component {
 	render () {
 		var configField = this.props.config.model[this.props.label];
 		var fieldType = (configField) ? configField.type : 'String';
-
+		
 		var field = React.createElement(
 			exports[fieldType] || fieldAlias[fieldType] || exports.Input,
 			{
@@ -48,11 +48,11 @@ exports.Input = class Input extends React.Component {
 	render () {
 		return (
 			<input
-				defaultValue={ this.props.value }
+				value={ this.props.value }
 				className="form-control"
 				type="text"
 				name={ this.props.label }
-				placeholder="" />
+				placeholder={ 'enter ' + this.props.label + ' here' } />
 		)
 	}
 };
@@ -112,6 +112,7 @@ exports.Date = class Date extends React.Component {
 				type="text"
 				name={ this.props.label }
 				defaultValue={ this.props.value }
+				data-provide="datepicker"
 				data-date-format="MM dd, yyyy"
 				placeholder="mm/dd/yy" />
 		)

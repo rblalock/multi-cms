@@ -11,21 +11,27 @@ class Detail extends React.Component {
 	constructor (props) {
 		super(props);
 
+		var c = this.getConfig();
+
 		this.state = {
-			data: {},
-			config: this.getConfig()
+			data: transformHelper.fieldTransform(
+				[],
+				this.connector,
+				c.model
+			)[0],
+			config: c
 		};
 
-		this.loadData();
+		if (this.props.params.objectId !== 'create') {
+			this.loadData();
+		}
 	}
 
 	/**
 	 * This is called when the route changes for the list
 	 * @param {Object} props React properties
 	 */
-	componentWillReceiveProps (props) {
-
-	}
+	componentWillReceiveProps (props) {}
 
 	/**
 	 * Get the configuration for this list.  Also sets the connector for the list.
@@ -79,7 +85,9 @@ class Detail extends React.Component {
 
 					<form>
 						{
-							Object.keys(this.state.data).map((key, index) => (
+							Object.keys(
+								transformHelper.filterIgnoredFields(this.state.data, this.connector)
+							).map((key, index) => (
 								<FormField
 									key={ index }
 									label={ key }

@@ -30,6 +30,11 @@ class ParseConnector {
 	constructor (config) {
 		this.config = config;
 
+		/**
+		 * Ignored fields for this connector, in the forms
+		 */
+		this.ignoreFields = ['createdAt', 'updatedAt', 'objectId'];
+
 		Parse.initialize(
 			this.config.appId,
 			this.config.javascriptKey

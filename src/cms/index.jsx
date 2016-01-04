@@ -17,6 +17,7 @@ ReactDOM.render(
 			<Route path="/" component={App}>
 				<Route path="list/:object" component={List} />
 				<Route path="object/:objectPathName/:objectId" component={Detail} />
+				<Route path="object/:objectPathName/create" component={Detail} />
 			</Route>
 		</Router>
 	),

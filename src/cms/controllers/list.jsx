@@ -3,6 +3,7 @@ var Theme = require('../theme');
 var config = require('../../config');
 var Tableview = require('../ui/tableview');
 var transformHelper = require('../helpers/transforms');
+var Link = require('react-router').Link;
 
 /**
  * @class Controller.List
@@ -50,10 +51,6 @@ class ListComponent extends React.Component {
 		};
 
 		this.loadData();
-	}
-
-	createNewRecord () {
-		//this.$route.router.go({ path: '/object/' + this.config.path + '/create' });
 	}
 
 	/**
@@ -116,8 +113,10 @@ class ListComponent extends React.Component {
 				<Theme.Content>
 					<Theme.Heading title={ this.state.config.name }>
 						<button className="btn btn-primary pull-right">
-							New Record &nbsp;&nbsp;
-							<span className="fa fa-plus"></span>
+							<Link to={ `/object/${ this.state.config.path }/create` }>
+								New Record &nbsp;&nbsp;
+								<span className="fa fa-plus"></span>
+							</Link>
 						</button>
 					</Theme.Heading>
 
