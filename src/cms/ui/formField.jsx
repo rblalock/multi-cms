@@ -19,10 +19,11 @@ exports.Field = class FormField extends React.Component {
 	render () {
 		var configField = this.props.config.model[this.props.label];
 		var fieldType = (configField) ? configField.type : 'String';
-		
+
 		var field = React.createElement(
 			exports[fieldType] || fieldAlias[fieldType] || exports.Input,
 			{
+				onChange: this.props.onChange,
 				value: this.props.value,
 				label: this.props.label
 			}
@@ -48,6 +49,7 @@ exports.Input = class Input extends React.Component {
 	render () {
 		return (
 			<input
+				onChange={ this.props.onChange }
 				value={ this.props.value }
 				className="form-control"
 				type="text"
@@ -72,6 +74,7 @@ exports.File = class File extends React.Component {
 			<div>
 				{ link }
 				<input
+					onChange={ this.props.onChange }
 					className="form-control"
 					type="file"
 					name={ this.props.label } />
@@ -91,7 +94,7 @@ exports.Boolean = class Boolean extends React.Component {
 
 	render () {
 		return (
-			<input type="checkbox" />
+			<input type="checkbox" onChange={ this.props.onChange } />
 		)
 	}
 };
@@ -108,6 +111,7 @@ exports.Date = class Date extends React.Component {
 	render () {
 		return (
 			<input
+				onChange={ this.props.onChange }
 				className="js-datepicker form-control"
 				type="text"
 				name={ this.props.label }

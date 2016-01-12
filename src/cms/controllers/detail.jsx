@@ -77,6 +77,30 @@ class Detail extends React.Component {
 		);
 	}
 
+	/**
+	 * Handle submit of the form
+	 */
+	handleSubmit (event) {
+		event.preventDefault();
+		console.log(this.state);
+	}
+
+	/**
+	 * Handle field change
+	 * @param {Object} event
+	 */
+	handleFieldChange (event) {
+		var obj = {};
+		obj[event.target.name] = event.target.value;
+
+		var newState = Object.assign(this.state, {
+			data: Object.assign(this.state.data, obj)
+		});
+		this.setState(newState);
+
+		console.log(this.state);
+	}
+
 	render () {
 		return (
 			<Theme.Container>
@@ -89,6 +113,7 @@ class Detail extends React.Component {
 								transformHelper.filterIgnoredFields(this.state.data, this.connector)
 							).map((key, index) => (
 								<FormField
+									onChange={ this.handleFieldChange.bind(this) }
 									key={ index }
 									label={ key }
 									value={ this.state.data[key] }
@@ -98,7 +123,7 @@ class Detail extends React.Component {
 					</form>
 
 					<div className="box-footer">
-						<button type="submit" className="btn btn-primary">Submit</button>
+						<button onClick={ this.handleSubmit.bind(this) } type="submit" className="btn btn-primary">Submit</button>
 					</div>
 				</Theme.Content>
 			</Theme.Container>
