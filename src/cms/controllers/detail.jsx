@@ -13,6 +13,10 @@ class Detail extends React.Component {
 
 		var c = this.getConfig();
 
+		if (!this.connector.currentUser()) {
+			console.error('NEED TO LOG IN');
+		}
+
 		this.state = {
 			data: transformHelper.fieldTransform(
 				[],
@@ -82,7 +86,15 @@ class Detail extends React.Component {
 	 */
 	handleSubmit (event) {
 		event.preventDefault();
-		console.log(this.state);
+
+		this.connector.create(
+			this.state.config.dataObject,
+			this.state.data,
+			(err, results) => {
+				// TODO handle callback
+				console.log(err, results);
+			}
+		);
 	}
 
 	/**
@@ -96,9 +108,8 @@ class Detail extends React.Component {
 		var newState = Object.assign(this.state, {
 			data: Object.assign(this.state.data, obj)
 		});
-		this.setState(newState);
 
-		console.log(this.state);
+		this.setState(newState);
 	}
 
 	render () {

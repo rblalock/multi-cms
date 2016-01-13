@@ -2,6 +2,7 @@ var Parse = require('parse');
 
 /**
  * Field transforms this connector must handle
+ * TODO this should be moved to the ParseConnector instance probably
  * @type {Object}
  */
 var fieldTypeTransforms = {
@@ -162,6 +163,42 @@ class ParseConnector {
 				callback(error, null);
 			}
 		});
+	}
+
+	/**
+	 * Login
+	 * @param  {String}   username
+	 * @param  {String}   password
+	 * @param  {Function} callback
+	 */
+	login (username, password, callback) {
+		Parse.User.logIn(username, password, {
+			success: function(user) {
+				if (callback) {
+					callback(null, { success: true });
+				}
+			},
+			error: function(user, error) {
+				if (callback) {
+					callback(error, null);
+				}
+			}
+		});
+	}
+
+	/**
+	 * Log current user out
+	 */
+	logout () {
+		Parse.User.logOut();
+	}
+
+	/**
+	 * Returns the current logged in user object
+	 * @return {Object}
+	 */
+	currentUser () {
+		return Parse.User.current();
 	}
 }
 

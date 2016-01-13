@@ -3,3 +3,4 @@ dist/assets
 _config.js
 .idea
 src/config.js
+npm-debug.log
